@@ -1,6 +1,7 @@
 from django import forms
 from . import models
 
+# Usuario
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = models.Usuario
@@ -40,3 +41,31 @@ class UsuarioForm(forms.ModelForm):
     def clean_telefone(self):
         telefone = self.cleaned_data.get('telefone', '').strip()
         return telefone
+
+# Pet
+class PetForm(forms.ModelForm):
+    class Meta:
+        model = models.Pet
+        fields = ['nome', 'data_de_nascimento', 'raca', 'porte', 'observacao']
+        widgets = {
+            'nome': forms.TextInput(attrs={
+                'placeholder': 'Nome do pet',
+                'autocomplete': 'name',
+            }),
+
+            'data_de_nascimento': forms.DateInput(attrs={
+                'type': 'date',
+                'max': '2099-12-31',
+            }),
+
+            'raca': forms.TextInput(attrs={
+                'placeholder': 'Raça do pet',
+            }),
+
+            'porte': forms.Select(),
+
+            'observacao': forms.Textarea(attrs={
+                'placeholder': 'Observações sobre o pet',
+                'rows': 4,
+            }),
+        }

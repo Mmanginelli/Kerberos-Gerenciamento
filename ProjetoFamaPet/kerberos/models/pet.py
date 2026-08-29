@@ -18,9 +18,7 @@ class Pet(models.Model):
     ]
 
     nome = models.CharField(max_length=100)
-    idade = models.PositiveIntegerField(
-        validators=[MaxValueValidator(40, message="Idade informada parece inválida.")]
-    )
+    data_de_nascimento = models.DateField(_("Data de nascimento do pet"), auto_now=False, auto_now_add=False)
     especie = models.CharField(max_length=20, choices=ESPECIE_ESCOLHA)
     raca = models.CharField(max_length=50)
     porte = models.CharField(max_length=20, choices=PORTE_ESCOLHA)
