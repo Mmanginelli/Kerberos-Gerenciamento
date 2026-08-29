@@ -69,3 +69,23 @@ class PetForm(forms.ModelForm):
                 'rows': 4,
             }),
         }
+
+
+    def clean_nome(self):
+        nome = self.cleaned_data.get('nome', '').strip()
+        if len(nome) < 3:
+            raise forms.ValidationError(
+                "O nome deve ter pelo menos 3 caracteres."
+            )
+        return nome
+    
+    def clean_data_de_nascimento(self):
+        data_de_nascimento = self.cleaned_data.get("data_de_nascimento")
+        if data_de_nascimento and data_de_nascimento > date.today():
+            raise forms.ValidationError(
+                "A data de nascimento não pode ser no futuro."
+            )
+        return data_de_nascimento 
+
+
+    
