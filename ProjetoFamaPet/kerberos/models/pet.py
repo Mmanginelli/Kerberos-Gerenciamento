@@ -13,7 +13,7 @@ class Pet(models.Model):
     ]
 
     nome = models.CharField(max_length=100)
-    data_de_nascimento = models.DateField(_("Data de nascimento do pet"), auto_now=False, auto_now_add=False)
+    data_de_nascimento = models.DateField(("Data de nascimento do pet"), auto_now=False, auto_now_add=False)
     raca = models.CharField(max_length=50)
     porte = models.CharField(max_length=20, choices=PORTE_ESCOLHA)
     observacao = models.TextField(blank=True, null=True)
