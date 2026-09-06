@@ -130,3 +130,22 @@ class EnderecoForm(forms.ModelForm):
             )
 
         return numero
+
+class ServicoForm(forms.ModelForm):
+    class Meta:
+        model = models.Servico
+        field = ['nome', 'descricao', 'valor']
+        widgets = {
+            'nome': forms.TextInput(attrs={
+                'placeholder': 'Nome do Serviço',
+            }),
+            'descricao': forms.TextInput(attrs={
+                'placeholder': 'Descrição do Produto',
+            }),
+            'valor': forms.NumberInput(attrs={
+                'placeholder': 'Valor do Serviço',
+                'step': '0.01',
+                'min': '0',
+            }),
+        }
+
