@@ -1,8 +1,19 @@
+from datetime import date
 from django import forms
 from . import models
 
+# Validar os nomes
+class NomeValidationMixin:
+    def clean_nome(self):
+        nome = self.cleaned_data.get("nome", "").strip()
+        if len(nome) < 3:
+            raise forms.ValidationError(
+                "O nome deve ter pelo menos 3 caracteres."
+            )
+        return nome
+
 # Usuario
-class UsuarioForm(forms.ModelForm):
+class UsuarioForm(NomeValidationMixin, forms.ModelForm):
     class Meta:
         model = models.Usuario
         fields = ['nome', 'email', 'telefone', 'endereco']
@@ -26,24 +37,27 @@ class UsuarioForm(forms.ModelForm):
             },
         }
 
-    def clean_nome(self):
-        nome = self.cleaned_data.get('nome', '').strip()
-        if len(nome) < 3:
-            raise forms.ValidationError(
-                "O nome deve ter pelo menos 3 caracteres."
-            )
-        return nome
-
     def clean_email(self):
         email = self.cleaned_data.get('email', '').strip().lower()
+        
+        if models.Usuario.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
+            raise forms.ValidationError(
+                "Já existe um usuário cadastrado com este e-mail."
+            )
         return email
 
     def clean_telefone(self):
         telefone = self.cleaned_data.get('telefone', '').strip()
+        numeros = "".join(filter(str.isdigit, telefone))
+
+        if len(numeros) not in (10, 11):
+            raise forms.ValidationError(
+            "Informe um telefone válido com DDD."
+        )
         return telefone
 
 # Pet
-class PetForm(forms.ModelForm):
+class PetForm(NomeValidationMixin, forms.ModelForm):
     class Meta:
         model = models.Pet
         fields = ['nome', 'data_de_nascimento', 'raca', 'porte', 'observacao']
@@ -55,7 +69,7 @@ class PetForm(forms.ModelForm):
 
             'data_de_nascimento': forms.DateInput(attrs={
                 'type': 'date',
-                'max': '2099-12-31',
+                'max': date.today().isoformat(),
             }),
 
             'raca': forms.TextInput(attrs={
@@ -69,15 +83,6 @@ class PetForm(forms.ModelForm):
                 'rows': 4,
             }),
         }
-
-
-    def clean_nome(self):
-        nome = self.cleaned_data.get('nome', '').strip()
-        if len(nome) < 3:
-            raise forms.ValidationError(
-                "O nome deve ter pelo menos 3 caracteres."
-            )
-        return nome
     
     def clean_data_de_nascimento(self):
         data_de_nascimento = self.cleaned_data.get("data_de_nascimento")
@@ -108,17 +113,16 @@ class EnderecoForm(forms.ModelForm):
             'cep': forms.TextInput(attrs={
                 'placeholder': '00000-000',
                 'maxlength': 9,
+                'autocomplete': 'postal-code',
             }),
         }
 
     def clean_cep(self):
-        cep = self.cleaned_data.get("cep", "").strip()
+        cep = "".join(filter(str.isdigit, self.cleaned_data["cep"]))
 
-        cep_numeros = "".join(filter(str.isdigit, cep))
-
-        if len(cep_numeros) != 8:
+        if len(cep) != 8:
             raise forms.ValidationError("O CEP deve conter 8 dígitos.")
-        return f"{cep_numeros[:5]}-{cep_numeros[5:]}"
+        return f"{cep[:5]}-{cep[5:]}"
 
     def clean_numero(self):
         numero = self.cleaned_data.get("numero")
@@ -129,7 +133,7 @@ class EnderecoForm(forms.ModelForm):
             )
         return numero
 
-class ServicoForm(forms.ModelForm):
+class ServicoForm(NomeValidationMixin, forms.ModelForm):
     class Meta:
         model = models.Servico
         fields = ['nome', 'descricao', 'valor']
@@ -139,7 +143,7 @@ class ServicoForm(forms.ModelForm):
             }),
             'descricao': forms.Textarea(attrs={
                 'placeholder': 'Descrição do Produto',
-                'row': 3,
+                'rows': 3,
             }),
             'valor': forms.NumberInput(attrs={
                 'placeholder': 'Valor do Serviço',
@@ -148,19 +152,11 @@ class ServicoForm(forms.ModelForm):
             }),
         }
     
-    def clean_nome(self):
-        nome = self.cleaned_data.get('nome', '').strip()
-        if len(nome) < 3:
-            raise forms.ValidationError(
-                "O nome deve ter pelo menos 3 caracteres."
-            )
-        return nome
-    
     def clean_valor(self):
         valor = self.cleaned_data.get("valor")
 
-        if valor is not None and valor < 0.00:
+        if valor is None or valor <= 0:
             raise forms.ValidationError(
-                "O valor não deve ser negativo"
+                "O valor deve ser maior que zero."
             )
         return valor
