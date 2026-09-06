@@ -160,3 +160,25 @@ class ServicoForm(NomeValidationMixin, forms.ModelForm):
                 "O valor deve ser maior que zero."
             )
         return valor
+
+class AgendamentoForm(forms.ModelForm):
+    data = forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={"type": "datetime-local"},
+            format="%Y-%m-%dT%H:%M"
+        ),
+        input_formats=["%Y-%m-%dT%H:%M"],
+    )
+
+    class Meta:
+        model = models.Agendamento
+        fields = ["pet", "data", "servicos"]
+        widgets = {
+            "servicos": forms.CheckboxSelectMultiple(),
+        }
+
+    def __init__(self, *args, usuario=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if usuario:
+            self.fields["pet"].queryset = models.Pet.objects.filter(usuario=usuario)
