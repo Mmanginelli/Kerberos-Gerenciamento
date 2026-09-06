@@ -118,7 +118,6 @@ class EnderecoForm(forms.ModelForm):
 
         if len(cep_numeros) != 8:
             raise forms.ValidationError("O CEP deve conter 8 dígitos.")
-
         return f"{cep_numeros[:5]}-{cep_numeros[5:]}"
 
     def clean_numero(self):
@@ -128,19 +127,19 @@ class EnderecoForm(forms.ModelForm):
             raise forms.ValidationError(
                 "O número deve ser maior que zero."
             )
-
         return numero
 
 class ServicoForm(forms.ModelForm):
     class Meta:
         model = models.Servico
-        field = ['nome', 'descricao', 'valor']
+        fields = ['nome', 'descricao', 'valor']
         widgets = {
             'nome': forms.TextInput(attrs={
                 'placeholder': 'Nome do Serviço',
             }),
-            'descricao': forms.TextInput(attrs={
+            'descricao': forms.Textarea(attrs={
                 'placeholder': 'Descrição do Produto',
+                'row': 3,
             }),
             'valor': forms.NumberInput(attrs={
                 'placeholder': 'Valor do Serviço',
@@ -148,4 +147,20 @@ class ServicoForm(forms.ModelForm):
                 'min': '0',
             }),
         }
+    
+    def clean_nome(self):
+        nome = self.cleaned_data.get('nome', '').strip()
+        if len(nome) < 3:
+            raise forms.ValidationError(
+                "O nome deve ter pelo menos 3 caracteres."
+            )
+        return nome
+    
+    def clean_valor(self):
+        valor = self.cleaned_data.get("valor")
 
+        if valor is not None and valor < 0.00:
+            raise forms.ValidationError(
+                "O valor não deve ser negativo"
+            )
+        return valor
