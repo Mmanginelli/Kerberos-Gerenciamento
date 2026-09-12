@@ -18,7 +18,7 @@ def listar_pets(request):
 
 def relatorio(request):
     relatorio = Agendamento.objects.prefetch_related('servicos').select_related('usuario', 'pet')
-    faturamento = sum(relatorio.valorTotal for relatorio in relatorio)
+    faturamento = sum(relatorio.valor_total for relatorio in relatorio)
     contexto = {"relatorio": relatorio,'faturamento': faturamento,}
     return render(request, 'relatorio/relatorio.html', contexto)
 
