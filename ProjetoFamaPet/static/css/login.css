@@ -1,0 +1,108 @@
+ 
+body {
+    background-color: #dddfe0;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Banner Amarelo */
+.bg-banner {
+    background-color: #fabb35;
+    height: 50vh;
+    width: 100vw;
+}
+
+/* Largura do cartão */
+.auth-wrapper {
+    width: 100%;
+    max-width: 440px;
+    padding: 0 15px;
+}
+
+/* Links das abas */
+.tab-link {
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+.tab-link.active {
+    color: #0088cc !important;
+}
+.tab-link.inactive {
+    color: #222222 !important;
+}
+
+/* Cartão Branco */
+.auth-card {
+    background-color: #ffffff;
+    border: 1px solid #b0b0b0;
+    border-radius: 0;
+    padding: 30px 25px;
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    color: #111;
+    margin-bottom: 20px;
+}
+
+/* Estilização para o {{ form.as_p }} */
+.auth-card p {
+    margin-bottom: 12px;
+}
+
+.auth-card label {
+    display: block;
+    font-size: 0.85rem;
+    color: #333;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card input[type="tel"] {
+    width: 100%;
+    height: 38px;
+    background-color: #d8d8d8;
+    border: 1px solid #c0c0c0;
+    border-radius: 6px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.auth-card input:focus {
+    border: 2px solid #0088cc;
+}
+
+/* Botão Azul */
+.btn-custom {
+    background-color: #51a7e0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 30px;
+    font-size: 0.95rem;
+    width: 50%;
+}
+
+.btn-custom:hover {
+    background-color: #3b91c9;
+    color: white;
+}
+
+@media (max-width: 576px) {
+    .btn-custom {
+        width: 100%;
+    }
+}
+
+.help-link {
+    color: #51a7e0;
+    font-size: 0.8rem;
+    text-decoration: none;
+}

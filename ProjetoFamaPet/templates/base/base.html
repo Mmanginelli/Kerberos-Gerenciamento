@@ -37,8 +37,6 @@
             <h4 class="fw-bold mb-0 text-white">
                 {% if user.is_authenticated %}
                 {{ user.first_name|default:user.username }}
-                {% else %}
-                Visitante
                 {% endif %}
             </h4>
         </div>
@@ -46,10 +44,13 @@
         <nav class="mt-2">
             <a href="{% url 'perfil' %}" class="nav-btn {% block nav_perfil %}{% endblock %}">Editar perfil</a>
             <a href="{% url 'agendamentos' %}" class="nav-btn {% block nav_agendamentos %}{% endblock %}">Agendamentos</a>
-            <a href="{% url 'listar_clientes' %}" class="nav-btn {% block nav_clientes %}{% endblock %}">Clientes</a>
-            <a href="{% url 'listar_pets' %}" class="nav-btn {% block nav_pets %}{% endblock %}">Lista de Pets</a>
-            <a href="{% url 'relatorio' %}" class="nav-btn {% block nav_relatorio %}{% endblock %}">Relatório</a>
-            <a href="#" class="nav-btn {% block nav_vacina %}{% endblock %}">Vacinação</a>
+            <a href="{% url 'listar_pets' %}" class="nav-btn {% block nav_pets %}{% endblock %}">
+                {% if user.is_staff or user.is_superuser %}Lista de Pets{% else %}Meus Pets{% endif %}
+            </a>
+            {% if user.is_staff or user.is_superuser %}
+                <a href="{% url 'listar_clientes' %}" class="nav-btn {% block nav_clientes %}{% endblock %}">Clientes</a>
+                <a href="{% url 'relatorio' %}" class="nav-btn {% block nav_relatorio %}{% endblock %}">Relatório</a>
+            {% endif %}
         </nav>
 
         <div class="logout mx-auto py-4">
