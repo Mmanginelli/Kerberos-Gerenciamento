@@ -38,7 +38,12 @@ class UsuarioForm(NomeValidationMixin, forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email', '').strip().lower()
         
-        if models.Usuario.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
+        # Corrigido: Alterado 'models.Usuario' para 'Usuario'
+        query = Usuario.objects.filter(email=email)
+        if self.instance and self.instance.pk:
+            query = query.exclude(pk=self.instance.pk)
+
+        if query.exists():
             raise forms.ValidationError(
                 "Já existe um usuário cadastrado com este e-mail."
             )
@@ -50,6 +55,6 @@ class UsuarioForm(NomeValidationMixin, forms.ModelForm):
 
         if len(numeros) not in (10, 11):
             raise forms.ValidationError(
-            "Informe um telefone válido com DDD."
-        )
-        return telefone
+                "Informe um telefone válido com DDD."
+            )
+        return numeros

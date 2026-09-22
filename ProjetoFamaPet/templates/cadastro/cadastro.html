@@ -23,42 +23,58 @@
             <div class="auth-card shadow-sm">
                 <h1 class="auth-title">Criar<br>conta:</h1>
 
-                <form method="post">
-                    {% csrf_token %}
+               <form method="post">
+    {% csrf_token %}
 
-                    {% if form %}
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger p-2 small mb-3">
-                                {% for error in form.non_field_errors %}
-                                    <p class="m-0">{{ error }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+    <!-- Erros gerais/globais do formulário -->
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger p-2 small mb-3">
+            {% for error in form.non_field_errors %}
+                <p class="m-0">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-                        {{ form.as_p }}
-                    {% else %}
-                        <p>
-                            <label for="id_nome">Nome:</label>
-                            <input type="text" name="nome" id="id_nome" placeholder="Nome completo" required>
-                        </p>
-                        <p>
-                            <label for="id_email">Email:</label>
-                            <input type="email" name="email" id="id_email" placeholder="seuemail@exemplo.com" required>
-                        </p>
-                        <p>
-                            <label for="id_telefone">Telefone:</label>
-                            <input type="tel" name="telefone" id="id_telefone" placeholder="(11) 91234-5678">
-                        </p>
-                        <p>
-                            <label for="id_senha">Senha:</label>
-                            <input type="password" name="senha" id="id_senha" placeholder="********" required>
-                        </p>
-                    {% endif %}
+    <!-- Campo Nome -->
+    <p>
+        <label for="{{ form.nome.id_for_label }}">Nome:</label>
+        {{ form.nome }}
+        {% if form.nome.errors %}
+            <div class="text-danger small">{{ form.nome.errors.0 }}</div>
+        {% endif %}
+    </p>
 
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-custom">Continuar</button>
-                    </div>
-                </form>
+    <!-- Campo Email -->
+    <p>
+        <label for="{{ form.email.id_for_label }}">E-mail:</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+            <div class="text-danger small">{{ form.email.errors.0 }}</div>
+        {% endif %}
+    </p>
+
+    <!-- Campo Telefone -->
+    <p>
+        <label for="{{ form.telefone.id_for_label }}">Telefone:</label>
+        {{ form.telefone }}
+        {% if form.telefone.errors %}
+            <div class="text-danger small">{{ form.telefone.errors.0 }}</div>
+        {% endif %}
+    </p>
+
+    <!-- Campo Endereço -->
+    <p>
+        <label for="{{ form.endereco.id_for_label }}">Endereço:</label>
+        {{ form.endereco }}
+        {% if form.endereco.errors %}
+            <div class="text-danger small">{{ form.endereco.errors.0 }}</div>
+        {% endif %}
+    </p>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-custom">Continuar</button>
+    </div>
+</form>
 
                 <div class="text-end mt-4">
                     <a href="#" class="help-link">Precisa de ajuda?</a>
