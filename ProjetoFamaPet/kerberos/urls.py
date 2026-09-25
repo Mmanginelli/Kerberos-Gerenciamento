@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
 from .views.ViewPet import (listar_pets, criar_pet, editar_pet, deletar_pet)
 from .views.ViewUsuario import (listar_clientes, criar_cliente, editar_cliente, deletar_cliente)
@@ -6,6 +7,9 @@ from .views.ViewPoliticas import (politica_privacidade, politica_regulamento, po
 from .views.ViewRelatorio import (relatorio)
 from .views.ViewAgendamento import (agendamentos)
 from .views.ViewPerfil import (perfil)
+from .views.ViewLogin import (login)
+from .views.ViewCadastrar import (cadastrar_usuario)
+
 
 urlpatterns = [
     path('clientes/', listar_clientes, name='listar_clientes'),
@@ -27,4 +31,9 @@ urlpatterns = [
     path('politica-privacidade/', politica_privacidade , name='politica-privacidade'),
     path('politica-transporte/', politica_transporte , name='politica-transporte'),
     path('politica-regulamento/', politica_regulamento , name='politica-regulamento'),
+
+    path('login/', login.as_view(template_name='login/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+    path('cadastro/', cadastrar_usuario, name='cadastro'),
 ]

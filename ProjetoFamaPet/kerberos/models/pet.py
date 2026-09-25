@@ -1,8 +1,7 @@
 # models/pet.py
-
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
-
 
 class Pet(models.Model):
 
@@ -18,11 +17,7 @@ class Pet(models.Model):
     porte = models.CharField(max_length=20, choices=PORTE_ESCOLHA)
     observacao = models.TextField(blank=True, null=True)
 
-    usuario = models.ForeignKey(
-        "Usuario",
-        on_delete=models.CASCADE,
-        related_name="pets"
-    )
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pets', null=True, blank=True)
 
     class Meta:
         verbose_name = "Pet"
